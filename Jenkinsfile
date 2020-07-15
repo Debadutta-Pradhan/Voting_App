@@ -28,9 +28,9 @@ pipeline {
                    bat '''
                      cd worker
                      mvn sonar:sonar \
-                             -Dsonar.projectKey=186ff1c937cbd8e4334413f9512ac2860973d79c \
-                             -Dsonar.host.url=http://localhost:9000 \
-                             -Dsonar.login=7c8f06e9919bef784b20055108989b17dfdc85c2
+			  -Dsonar.projectKey=Voting_Map \
+			  -Dsonar.host.url=http://localhost:9000 \
+			  -Dsonar.login=a9393aaba784cfc4931e732eb03f9911f870aea6
                    '''
    }
    }
