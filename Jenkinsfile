@@ -14,9 +14,9 @@ pipeline {
         }
      steps {
     bat '''
-           cd happytrip-code
+           cd Voting_App
            mvn clean install
-	         java -version
+	   java -version
            mvn -version
            mvn clean package
                    
@@ -26,7 +26,7 @@ pipeline {
    stage('SonarQube') {
                 steps {
                    bat '''
-                       cd happytrip-code
+                       cd Voting_App
                      mvn sonar:sonar \
                              -Dsonar.projectKey=186ff1c937cbd8e4334413f9512ac2860973d79c \
                              -Dsonar.host.url=http://localhost:9000 \
