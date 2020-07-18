@@ -2,10 +2,10 @@ redis:
     image: redis
 db:
     image: postgres:9.4
-vote:
-    image: debaduttapradhan1996/vote-app
     envirnment:
       - POSTGRES_HOST_AUTH_METHOD=trust
+vote:
+    image: debaduttapradhan1996/vote-app
     ports:
        - 5000:80
     link:
