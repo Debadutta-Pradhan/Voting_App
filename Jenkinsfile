@@ -59,20 +59,31 @@ pipeline {
          echo "Running project..."
          echo "Deploying Container Vote-app on port 5000"
          docker run -d --name=vote -p 5000:80 --link redis:redis debaduttapradhan1996/vote-app
+	 
+	 echo "Deploying Container Result-app on port 5001"
+         docker run -d --name=result -p 5001:80 --link redis:redis --link db:db debaduttapradhan1996/result-app
+         
+         echo "Deploying Container worker-app"
+         docker run -d --name=worker --link redis:redis --link db:db debaduttapradhan1996/worker-app
          
         
          '''
          }
-   stage('Push image') {
+
+      }
+	stage('Push image') {
         /* 
 			You would need to first register with DockerHub before you can push images to your account
 		*/
-        docker.withRegistry('https://hub.docker.com/repositories', 'docker_hub') {
+	docker.withRegistry('https://hub.docker.com/repositories', 'docker_hub') {
+ 	steps{
+	   bat '''
             app.push("${env.BUILD_NUMBER}")
             app.push("latest")
+	    
+	    '''
             } 
                 echo "Trying to Push Docker Build to DockerHub"
-      }
       }
   
 }
