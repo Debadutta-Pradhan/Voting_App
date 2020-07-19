@@ -44,33 +44,16 @@ pipeline {
                 }
             }
         }
-   stage('Build Container'){
-         steps{
-         bat '''
-         echo "Remove containers if any"
-         docker rm -f redis db vote result worker
-         
-         echo "Run redis in name redis"
-         docker run -d --name=redis redis
-         
-         echo "Run Postgres in name db"
-         docker run -d --name=db -e POSTGRES_HOST_AUTH_METHOD=trust postgres:9.4
-         
-         echo "Running project..."
-         echo "Deploying Container Vote-app on port 5000"
-         docker run -d --name=vote -p 5000:80 --link redis:redis debaduttapradhan1996/vote-app
-	 
-	 echo "Deploying Container Result-app on port 5001"
-         docker run -d --name=result -p 5001:80 --link redis:redis --link db:db debaduttapradhan1996/result-app
-         
-         echo "Deploying Container worker-app"
-         docker run -d --name=worker --link redis:redis --link db:db debaduttapradhan1996/worker-app
-         
-        
-         '''
-         }
-
-      }
+	  stage('Build image') {
+                   steps {
+                    echo 'Starting to build docker image DB'
+                    script {
+                        def DB = docker.build("my-image:${env.BUILD_ID}","-f ${env.WORKSPACE}/vote/Dockerfile .")
+                        def nodejs = docker.build("my-image:${env.BUILD_ID}","-f ${env.WORKSPACE}/result/Dockerfile .") 
+                        def php = docker.build("my-image:${env.BUILD_ID}","-f ${env.WORKSPACE}/worker/Dockerfile .") 
+                    }
+                }
+            }
 }
 post {
         always {
