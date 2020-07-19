@@ -58,13 +58,13 @@ pipeline {
          
          echo "Running project..."
          echo "Deploying Container Vote-app on port 5000"
-         docker run -d --name=vote -p 5000:80 --link redis:redis umeshfarrow/vote-app
+         docker run -d --name=vote -p 5000:80 --link redis:redis debaduttapradhan1996/vote-app
          
          echo "Deploying Container Result-app on port 5001"
-         docker run -d --name=result -p 5001:80 --link redis:redis --link db:db umeshfarrow/result-app
+         docker run -d --name=result -p 5001:80 --link redis:redis --link db:db debaduttapradhan1996/result-app
          
          echo "Deploying Container worker-app"
-         docker run -d --name=worker --link redis:redis --link db:db umeshfarrow/worker-app
+         docker run -d --name=worker --link redis:redis --link db:db debaduttapradhan1996/worker-app
          '''
          }
       }
