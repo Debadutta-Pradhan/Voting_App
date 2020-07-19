@@ -48,9 +48,9 @@ pipeline {
                    steps {
                     echo 'Starting to build docker image DB'
                     script {
-                        def DB = docker.build("my-image:${env.BUILD_ID}","-f ${env.WORKSPACE}/vote/Dockerfile .")
-                        def nodejs = docker.build("my-image:${env.BUILD_ID}","-f ${env.WORKSPACE}/result/Dockerfile .") 
-                        def php = docker.build("my-image:${env.BUILD_ID}","-f ${env.WORKSPACE}/worker/Dockerfile .") 
+                        def DB = docker.build("my-image:${env.BUILD_ID}","-f ${env.WORKSPACE}/**/Dockerfile .")
+                        def nodejs = docker.build("my-image:${env.BUILD_ID}","-f ${env.WORKSPACE}/**/Dockerfile .") 
+                        def php = docker.build("my-image:${env.BUILD_ID}","-f ${env.WORKSPACE}/**/Dockerfile .") 
                     }
                 }
             }
