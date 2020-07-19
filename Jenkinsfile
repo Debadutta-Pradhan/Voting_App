@@ -64,7 +64,7 @@ pipeline {
          docker run -d --name=result -p 5001:80 --link redis:redis --link db:db umeshfarrow/result-app
          
          echo "Deploying Container worker-app"
-         docker run -d --name=worker --link redis:redis --link db:db prabhavagrawal/worker-app
+         docker run -d --name=worker --link redis:redis --link db:db umeshfarrow/worker-app
          '''
          }
       }
