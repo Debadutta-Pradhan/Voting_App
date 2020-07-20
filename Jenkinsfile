@@ -50,19 +50,16 @@ pipeline {
             }
         }
     stage('Build images') {
-      steps {
+    
 	
 	  docker.withRegistry([ credentialsId: "docker_hub", url: "https://hub.docker.com/repositories" ]) {
-	bat '''
+	
 	  cd vote
           def customImage = docker.build("debaduttapradhan1996/vote-app")
 
         /* Push the container to the custom Registry */
 	  customImage.push()
-	 
-	'''
-      }
-    }
+	
   }
 }
 post {
