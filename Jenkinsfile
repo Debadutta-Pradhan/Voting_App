@@ -50,21 +50,39 @@ pipeline {
             }
         }
     stage('Build images') {
-    
-	steps{
-	   
-	  bat '''
-	  docker.withRegistry('https://registry.hub.docker.com/', 'docker_Hub')
-	  
+      steps {
+	bat '''
 	  cd vote
-          def customImage = docker.build("debaduttapradhan1996/vote-app")
-
-        /* Push the container to the custom Registry */
-	  customImage.push()
-	  '''
-	  
-	
-  }
+         'docker build -f "Dockerfile-vote" -t debaduttapradhan1996/vote-app:latest .'
+	  cd worker
+         'docker build -f "Dockerfile-worker" -t debaduttapradhan1996/worker-app:latest .'
+	 
+	'''
+      }
+    }
+    stage('Publish') {
+      when {
+        branch 'master'
+      }
+      steps {
+        withDockerRegistry([ credentialsId: "docker_hub", url: "https://hub.docker.com/repositories" ]) {
+	bat '''
+           'docker push debaduttapradhan1996/vote-app:latest'
+           'docker push debaduttapradhan1996/worker-app:latest'
+	'''
+        }
+      }
+    }
 }
-}
+post {
+        always {
+            //archiveArtifacts artifacts: 'generatedFile.log', onlyIfSuccessful: true
+          
+            emailext attachLog: true,
+                body: "${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More info at: ${env.BUILD_URL}",
+                recipientProviders: [developers(), requestor()],
+                subject: "Jenkins Build :- ${currentBuild.currentResult}: Job ${env.JOB_NAME}"
+            
+        }
+    }
 }
