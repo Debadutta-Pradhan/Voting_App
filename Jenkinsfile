@@ -51,26 +51,16 @@ pipeline {
         }
     stage('Build images') {
       steps {
+	
+	  docker.withRegistry([ credentialsId: "docker_hub", url: "https://hub.docker.com/repositories" ]) {
 	bat '''
 	  cd vote
-         'docker build -f "Dockerfile-vote" -t debaduttapradhan1996/vote-app:latest .'
-	  cd worker
-         'docker build -f "Dockerfile-worker" -t debaduttapradhan1996/worker-app:latest .'
+          def customImage = docker.build("debaduttapradhan1996/vote-app")
+
+        /* Push the container to the custom Registry */
+	  customImage.push()
 	 
 	'''
-      }
-    }
-    stage('Publish') {
-      when {
-        branch 'master'
-      }
-      steps {
-        withDockerRegistry([ credentialsId: "docker_hub", url: "https://hub.docker.com/repositories" ]) {
-	bat '''
-           'docker push debaduttapradhan1996/vote-app:latest'
-           'docker push debaduttapradhan1996/worker-app:latest'
-	'''
-        }
       }
     }
 }
