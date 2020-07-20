@@ -52,15 +52,17 @@ pipeline {
     stage('Build images') {
     
 	steps{
-	  docker.withRegistry('https://registry.hub.docker.com/', 'docker_Hub') {
+	   
 	  bat '''
+	  docker.withRegistry('https://registry.hub.docker.com/', 'docker_Hub')
+	  
 	  cd vote
           def customImage = docker.build("debaduttapradhan1996/vote-app")
 
         /* Push the container to the custom Registry */
 	  customImage.push()
 	  '''
-	  }
+	  
 	
   }
 }
