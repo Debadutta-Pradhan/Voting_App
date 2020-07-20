@@ -1,5 +1,11 @@
 pipeline {
- agent any
+ agent { label 'docker' }
+ options {
+    buildDiscarder(logRotator(numToKeepStr: '5'))
+  }
+ triggers {
+    cron('@daily')
+  }
   stages {
     stage('SCM') {
       steps {
@@ -43,30 +49,23 @@ pipeline {
                 }
             }
         }
-   stage('Build Container'){
-         steps{
-         bat '''
-         echo "Remove containers if any"
-         docker rm -f redis db vote result worker
-         
-         echo "Run redis in name redis"
-         docker run -d --name=redis redis
-         
-         echo "Run Postgres in name db"
-         docker run -d --name=db -e POSTGRES_HOST_AUTH_METHOD=trust postgres:9.4
-         
-         echo "Running project..."
-         echo "Deploying Container Vote-app on port 5000"
-         docker run -d --name=vote -p 5000:80 --link redis:redis debaduttapradhan1996/vote-app
-         
-         echo "Deploying Container Result-app on port 5001"
-         docker run -d --name=result -p 5001:80 --link redis:redis --link db:db debaduttapradhan1996/result-app
-         
-         echo "Deploying Container worker-app"
-         docker run -d --name=worker --link redis:redis --link db:db debaduttapradhan1996/worker-app
-         '''
-         }
+    stage('Build') {
+      steps {
+        sh 'docker build -f "Dockerfile-vote" -t debaduttapradhan1996/vote-app:latest .'
+        sh 'docker build -f "Dockerfile-worker" -t debaduttapradhan1996/worker-app:latest .'
       }
+    }
+    stage('Publish') {
+      when {
+        branch 'master'
+      }
+      steps {
+        withDockerRegistry([ credentialsId: "docker_hub", url: "https://hub.docker.com/repositories" ]) {
+          sh 'docker push debaduttapradhan1996/vote-app:latest'
+          sh 'docker push debaduttapradhan1996/worker-app:latest'
+        }
+      }
+    }
 }
 post {
         always {
