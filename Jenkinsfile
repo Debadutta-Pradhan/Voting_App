@@ -51,8 +51,12 @@ pipeline {
         }
     stage('Build') {
       steps {
-        sh 'docker build -f "Dockerfile-vote" -t debaduttapradhan1996/vote-app:latest .'
-        sh 'docker build -f "Dockerfile-worker" -t debaduttapradhan1996/worker-app:latest .'
+	bat '''
+	
+         'docker build -f "Dockerfile-vote" -t debaduttapradhan1996/vote-app:latest .'
+         'docker build -f "Dockerfile-worker" -t debaduttapradhan1996/worker-app:latest .'
+	 
+	'''
       }
     }
     stage('Publish') {
@@ -61,8 +65,10 @@ pipeline {
       }
       steps {
         withDockerRegistry([ credentialsId: "docker_hub", url: "https://hub.docker.com/repositories" ]) {
-          sh 'docker push debaduttapradhan1996/vote-app:latest'
-          sh 'docker push debaduttapradhan1996/worker-app:latest'
+	bat '''
+           'docker push debaduttapradhan1996/vote-app:latest'
+           'docker push debaduttapradhan1996/worker-app:latest'
+	'''
         }
       }
     }
