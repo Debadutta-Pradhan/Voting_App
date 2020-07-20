@@ -49,7 +49,7 @@ pipeline {
                 }
             }
         }
-    stage('Build') {
+    stage('Build images') {
       steps {
 	bat '''
 	
