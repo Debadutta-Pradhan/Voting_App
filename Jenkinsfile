@@ -51,13 +51,8 @@ pipeline {
         }
     stage('Build images') {
       steps {
-	bat '''
-	  cd vote
-         'docker build -f "Dockerfile-vote" -t debaduttapradhan1996/vote-app:latest .'
-	  cd worker
-         'docker build -f "Dockerfile-worker" -t debaduttapradhan1996/worker-app:latest .'
-	 
-	'''
+	 sh 'docker build -f "Dockerfile-terraform" -t debaduttapradhan1996/voter-app:latest .'
+         sh 'docker build -f "Dockerfile-cli" -t debaduttapradhan1996/worker-app:latest .'
       }
     }
     stage('Publish') {
@@ -66,10 +61,9 @@ pipeline {
       }
       steps {
         withDockerRegistry([ credentialsId: "docker_hub", url: "https://hub.docker.com/repositories" ]) {
-	bat '''
-           'docker push debaduttapradhan1996/vote-app:latest'
-           'docker push debaduttapradhan1996/worker-app:latest'
-	'''
+		
+	 sh 'docker push brightbox/terraform:latest'
+         sh 'docker push brightbox/cli:latest'
         }
       }
     }
