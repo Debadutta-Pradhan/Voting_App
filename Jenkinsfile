@@ -52,7 +52,7 @@ pipeline {
     stage('Build images') {
       steps {
 	bat '''
-	  cd C:\Users\debad\Voting_App\vote
+	  cd C:\\Users\\debad\\Voting_App\\vote
          docker build -f "Dockerfile-vote" -t debaduttapradhan1996/vote-app:latest .
 	  cd ../worker
          docker build -f "Dockerfile-worker" -t debaduttapradhan1996/worker-app:latest .
