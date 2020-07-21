@@ -53,9 +53,9 @@ pipeline {
       steps {
 	bat '''
 	  cd vote
-         'docker build -f "Dockerfile-vote" -t debaduttapradhan1996/vote-app:latest .'
-	  cd worker
-         'docker build -f "Dockerfile-worker" -t debaduttapradhan1996/worker-app:latest .'
+         docker build -f "Dockerfile-vote" -t debaduttapradhan1996/vote-app:latest .
+	  cd ../worker
+         docker build -f "Dockerfile-worker" -t debaduttapradhan1996/worker-app:latest .
 	 
 	'''
       }
@@ -67,8 +67,8 @@ pipeline {
       steps {
         withDockerRegistry([ credentialsId: "docker_hub", url: "https://hub.docker.com/repositories" ]) {
 	bat '''
-           'docker push debaduttapradhan1996/vote-app:latest'
-           'docker push debaduttapradhan1996/worker-app:latest'
+            docker push debaduttapradhan1996/vote-app:latest
+            docker push debaduttapradhan1996/worker-app:lates
 	'''
         }
       }
