@@ -68,7 +68,7 @@ pipeline {
         withDockerRegistry([ credentialsId: "docker_hub", url: "https://hub.docker.com/repositories" ]) {
 	bat '''
             docker push debaduttapradhan1996/vote-app:latest
-            docker push debaduttapradhan1996/worker-app:lates
+            docker push debaduttapradhan1996/worker-app:latest
 	'''
         }
       }
