@@ -53,9 +53,9 @@ pipeline {
       steps {
 	bat '''
 	  cd vote
-         docker build -f "Dockerfile-vote" -t debaduttapradhan1996/vote-app:latest .
+         docker build -f "Dockerfile" -t debaduttapradhan1996/vote-app:latest .
 	  cd ../worker
-         docker build -f "Dockerfile-worker" -t debaduttapradhan1996/worker-app:latest .
+         docker build -f "Dockerfile" -t debaduttapradhan1996/worker-app:latest .
 	 
 	'''
       }
